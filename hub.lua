@@ -1,6 +1,6 @@
 local DiscordLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/discord%20lib.txt"))()
 
-local win = DiscordLib:Window("🤍Bunnie Hub🤍")
+local win = DiscordLib:Window("🤍Bunnie Hub🤍", "https://webtinq.nl/sdawfs/afbeeldingen/image.png")
 
 -- Main server
 local mainServ = win:Server("Main", "http://www.roblox.com/asset/?id=6031075938")
@@ -57,16 +57,15 @@ adminChannel:Button("Execute Dex Explorer", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/BigBoyTimme/New.Loadstring.Scripts/refs/heads/main/Dex.Explorer"))()
 end)
 
--- Additional Game Categories
+-- Games Server
+local gamesServ = win:Server("Games", "http://www.roblox.com/asset/?id=6031075938")
 local games = {
     "Blox Fruits", "Pet Simulator X", "Tower of Hell", "Brookhaven RP", "Murder Mystery 2", "Adopt Me", "Doors", "Jailbreak", "BedWars"
 }
 
 for _, gameName in ipairs(games) do
-    local gameServer = win:Server(gameName, "http://www.roblox.com/asset/?id=6031075938")
-    local gameChannel = gameServer:Channel(gameName .. " Scripts")
-    gameChannel:Label("Insert script link below")
-    gameChannel:Textbox("Script URL", "Paste here!", false, function(link)
-        loadstring(game:HttpGet(link))()
+    local gameChannel = gamesServ:Channel(gameName)
+    gameChannel:Button("Execute Script", function()
+        print("sigma")
     end)
 end
