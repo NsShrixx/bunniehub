@@ -1,9 +1,9 @@
 local DiscordLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/discord%20lib.txt"))()
 
-local win = DiscordLib:Window("🤍Bunnie Hub🤍", "https://webtinq.nl/sdawfs/afbeeldingen/image.png")
+local win = DiscordLib:Window("🤍Bunnie Hub🤍")
 
 -- Main server
-local mainServ = win:Server("Main", "http://www.roblox.com/asset/?id=6031075938")
+local mainServ = win:Server("Main", "https://webtinq.nl/sdawfs/afbeeldingen/image.png")
 
 -- Arsenal Scripts Channel
 local arsenalScripts = mainServ:Channel("Arsenal Scripts")
