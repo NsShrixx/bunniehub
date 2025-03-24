@@ -3,7 +3,7 @@ local DiscordLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/da
 local win = DiscordLib:Window("🤍Bunnie Hub🤍")
 
 -- Main server
-local mainServ = win:Server("Main", "https://webtinq.nl/sdawfs/afbeeldingen/image.png")
+local mainServ = win:Server("Main", "http://www.roblox.com/asset/?id=127668012498415") -- Replace with correct asset ID when available
 
 -- Arsenal Scripts Channel
 local arsenalScripts = mainServ:Channel("Arsenal Scripts")
