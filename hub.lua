@@ -3,7 +3,7 @@ local DiscordLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/da
 local win = DiscordLib:Window("🤍Bunnie Hub🤍")
 
 -- Main server
-local mainServ = win:Server("Main", "http://www.roblox.com/asset/?id=127668012498415") -- Replace with correct asset ID when available
+local mainServ = win:Server("Main", "http://www.roblox.com/asset/?id=127668012498415")
 
 -- Arsenal Scripts Channel
 local arsenalScripts = mainServ:Channel("Arsenal Scripts")
@@ -48,7 +48,7 @@ visualChannel:Slider("FOV Radius", 50, 200, _G.CircleRadius, function(val)
 end)
 
 -- Misc Server
-local miscServ = win:Server("Misc", "http://www.roblox.com/asset/?id=6031075938")
+local miscServ = win:Server("Misc", "http://www.roblox.com/asset/?id=127668012498415")
 local adminChannel = miscServ:Channel("Admin")
 adminChannel:Button("Execute Infinite Yield", function()
     loadstring(game:HttpGet(('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'),true))()
@@ -58,7 +58,7 @@ adminChannel:Button("Execute Dex Explorer", function()
 end)
 
 -- Games Server
-local gamesServ = win:Server("Games", "http://www.roblox.com/asset/?id=6031075938")
+local gamesServ = win:Server("Games", "http://www.roblox.com/asset/?id=127668012498415")
 local games = {
     "Blox Fruits", "Pet Simulator X", "Tower of Hell", "Brookhaven RP", "Murder Mystery 2", "Adopt Me", "Doors", "Jailbreak", "BedWars"
 }
