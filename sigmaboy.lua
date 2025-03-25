@@ -16,8 +16,8 @@
 
 edited: 1/26
 developers:
-v3rm AbstractPoo	discord Abstract#8007
-v3rm 0xDEITY		discord Deity#0228
+discord Abstract#8007
+discord Deity#0228
 
 ]]
 
@@ -432,10 +432,10 @@ function Library:create(options)
 	end
 
 	options = self:set_defaults({
-		Name = "Bunnie Hub",
+		Name = "Mercury",
 		Size = UDim2.fromOffset(600, 400),
 		Theme = self.Themes[settings.Theme],
-		Link = "https://github.com/sigmaboy2"
+		Link = "https://github.com/deeeity/mercury-lib"
 	}, options)
 
 	if getgenv and getgenv().MercuryUI then
@@ -919,8 +919,9 @@ function Library:create(options)
 
 	rawset(mt, "creditsContainer", creditsTab.container)
 
-	creditsTab:credit{Name = "Akitio", Description = "Idea and chooses scripts", Discord = "yotokr", V3rmillion = "Doesnt have it "}
-	creditsTab:credit{Name = "Ixysye", Description = "UI Maker", Discord = "sigma031_1", V3rmillion = "SigmaScript2"}
+	creditsTab:credit{Name = "Abstract", Description = "UI Library Developer", Discord = "Abstract#8007", V3rmillion = "AbstractPoo"}
+	creditsTab:credit{Name = "Deity", Description = "UI Library Developer", Discord = "Deity#0228", V3rmillion = "0xDEITY"}
+	creditsTab:credit{Name = "Repository", Description = "UI Library Repository", Github="https://github.com/deeeity/mercury-lib/blob/master/src.lua"}
 
 	return mt
 end
@@ -1291,8 +1292,6 @@ function Library:toggle(options)
 		Callback = function(state) end
 	}, options)
 
-	if options.StartingState then options.Callback(true) end
-
 	local toggleContainer = self.container:object("TextButton", {
 		Theme = {BackgroundColor3 = "Secondary"},
 		Size = UDim2.new(1, -20, 0, 52)
@@ -1400,8 +1399,10 @@ function Library:toggle(options)
 		else
 			onIcon:crossfade(offIcon, 0.1)
 		end
-		options.Callback(toggled)
+		task.spawn(function() options.Callback(toggled) end)
 	end
+
+	if options.StartingState then methods:SetState(true) end
 
 	return methods
 end
@@ -2767,8 +2768,30 @@ function Library:credit(options)
 			TextXAlignment = Enum.TextXAlignment.Left
 		})
 	end
+	
+	
 
 	if setclipboard then
+	
+		if options.Github then
+			local githubContainer = creditContainer:object("TextButton", {
+				AnchorPoint = Vector2.new(1, 1),
+				Size = UDim2.fromOffset(24, 24),
+				Position = UDim2.new(1, -8, 1, -8),
+				Theme = {BackgroundColor3 = {"Main", 10}}
+			}):round(5):tooltip("copy github")
+			local github = githubContainer:object("ImageLabel", {
+				Image = "http://www.roblox.com/asset/?id=11965755499",
+				Size = UDim2.new(1, -4, 1, -4),
+				Centered = true,
+				BackgroundTransparency = 1
+			}):round(100)
+
+			githubContainer.MouseButton1Click:connect(function()
+				setclipboard(options.Github)
+			end)
+		end
+	
 		if options.Discord then
 			local discordContainer = creditContainer:object("TextButton", {
 				AnchorPoint = Vector2.new(1, 1),
@@ -3517,7 +3540,7 @@ function Library:label(options)
 		Theme = {TextColor3 = "WeakText"},
 		TextXAlignment = Enum.TextXAlignment.Left
 	})
-	
+
 	self:_resize_tab()
 
 	local methods = {}
@@ -3525,7 +3548,7 @@ function Library:label(options)
 	function methods:SetText(txt)
 		text.Text = txt
 	end
-	
+
 	function methods:SetDescription(txt)
 		description.Text = txt
 	end
