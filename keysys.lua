@@ -9,7 +9,7 @@ local Window = Library:Window{
     Size = UDim2.fromOffset(830, 525),
     Resize = true,
     Acrylic = true,
-    Theme = "Vynixu",
+    Theme = "Amethyst",
     MinimizeKey = Enum.KeyCode.P
 }
 
