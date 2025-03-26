@@ -20,7 +20,7 @@ local Window = Library:Window{
 -- Create Tabs
 local Tabs = {
     Main = Window:Tab{
-        Title = "Keysystem",
+        Title = "🔒Keysystem",
         Icon = "phosphor-users-bold"
     },
     Settings = Window:Tab{
