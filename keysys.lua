@@ -36,7 +36,7 @@ local enteredKey = ""
 -- Key System UI
 local KeyPrompt = Tabs.KeySys:Paragraph("KeyPrompt", {
     Title = "Welcome to BunnieHub",
-    Content = "Please enter the key to continue.\nValid Keys: NoxiusFree, DevPanel, CoolKid"
+    Content = "Please enter the key to continue."
 })
 
 local KeyInput = Tabs.KeySys:Input("KeyInput", {
@@ -55,18 +55,34 @@ Tabs.KeySys:Button({
     Callback = function()
         if VALID_KEYS[enteredKey] then
             KeyPrompt:SetValue("✅ Key accepted! Executing script...")
+
             Library:Notify({
                 Title = "Key System",
-                Content = "Correct key entered! Executing script in 3 seconds...",
+                Content = "Correct key entered! Executing script now...",
                 Duration = 3,
                 Sound = { SoundId = "rbxassetid://8486683243" }
             })
 
-            -- Wait 3 seconds, then execute the script and remove the UI
-            task.delay(3, function()
-                Window:Destroy()
+            -- Execute the script FIRST
+            local success, err = pcall(function()
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/NsShrixx/bunniehub/refs/heads/main/hub.lua"))()
             end)
+
+            -- If execution was successful, remove UI after 3 seconds
+            if success then
+                task.delay(3, function()
+                    pcall(function() Window:Destroy() end)
+                    collectgarbage()
+                end)
+            else
+                KeyPrompt:SetValue("❌ Script execution failed! Error: " .. err)
+                Library:Notify({
+                    Title = "Error",
+                    Content = "Script failed to execute! Check console for details.",
+                    Duration = 5,
+                    Sound = { SoundId = "rbxassetid://8486683243" }
+                })
+            end
 
         else
             KeyPrompt:SetValue("❌ Invalid Key! Try again.")
