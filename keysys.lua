@@ -20,7 +20,7 @@ local Window = Library:Window{
 -- Create Tabs
 local Tabs = {
     Main = Window:Tab{
-        Title = "Main",
+        Title = "Keysystem",
         Icon = "phosphor-users-bold"
     },
     Settings = Window:Tab{
@@ -74,6 +74,8 @@ Tabs.Main:Button({
 
         else
             KeyPrompt:SetValue("Invalid key! Try again.")
+
+                Window:SelectTab(1)
             
             Library:Notify({
                 Title = "Key System",
