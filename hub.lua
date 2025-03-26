@@ -9,16 +9,12 @@ local Window = Library:Window{
     Size = UDim2.fromOffset(830, 525),
     Resize = true,
     Acrylic = true,
-    Theme = "Vynixu",
+    Theme = "Amethyst",
     MinimizeKey = Enum.KeyCode.P
 }
 
 -- Creating the Tabs
 local Tabs = {
-    KeySys = Window:Tab{
-        Title = "Key System",
-        Icon = "phosphor-lock-key-bold"
-    },
     Main = Window:Tab{
         Title = "Main",
         Icon = "phosphor-users-bold"
@@ -39,78 +35,39 @@ local GameScripts = {
     ["Blox Fruits"] = "https://raw.githubusercontent.com/newredz/BloxFruits/refs/heads/main/Source.luau"
 }
 
-local VALID_KEY = "NoxiusFree"
-local enteredKey = ""
+-- Function to create a Game Tab with an Execute Button
+local function createGameTab(gameName, scriptURL)
+    local GameTab = Window:Tab{
+        Title = gameName,
+        Icon = "phosphor-gamepad-bold"
+    }
 
--- Key System UI
-local KeyPrompt = Tabs.KeySys:Paragraph("KeyPrompt", {
-    Title = "Welcome to BunnieHub",
-    Content = "Please enter the key to continue.\nKey: NoxiusFree"
-})
-
-local KeyInput = Tabs.KeySys:Input("KeyInput", {
-    Title = "Enter Key",
-    Default = "",
-    Numeric = false,
-    Placeholder = "Enter the key...",
-    Callback = function(Value)
-        enteredKey = Value
-    end
-})
-
-Tabs.KeySys:Button({
-    Title = "Validate Key",
-    Description = "Click to validate your key.",
-    Callback = function()
-        if enteredKey == VALID_KEY then
-            KeyPrompt:SetValue("✅ Key accepted! Loading UI...")
+    -- Execute Button
+    GameTab:Button({
+        Title = "Execute",
+        Description = "Click to execute the script for " .. gameName,
+        Callback = function()
             Library:Notify({
-                Title = "Key System",
-                Content = "Correct key entered! Unlocking features...",
+                Title = "Executing Script",
+                Content = "Running script for " .. gameName .. "...",
                 Duration = 3,
-                Sound = { SoundId = "rbxassetid://8486683243" }
-            })
-
-            -- Wait 3 seconds, then remove the UI
-            task.delay(3, function()
-                Window:Destroy()
-            end)
-
-            -- Unlock game tabs
-            for gameName, scriptURL in pairs(GameScripts) do
-                local GameTab = Window:Tab{
-                    Title = gameName,
-                    Icon = "phosphor-gamepad-bold"
+                Sound = {
+                    SoundId = "rbxassetid://8486683243"
                 }
-
-                GameTab:Button({
-                    Title = "Execute",
-                    Description = "Click to execute the script for " .. gameName,
-                    Callback = function()
-                        Library:Notify({
-                            Title = "Executing Script",
-                            Content = "Running script for " .. gameName .. "...",
-                            Duration = 3,
-                            Sound = { SoundId = "rbxassetid://8486683243" }
-                        })
-                        loadstring(game:HttpGet(scriptURL, true))()
-                    end
-                })
-            end
-
-        else
-            KeyPrompt:SetValue("❌ Invalid Key! Try again.")
-            Library:Notify({
-                Title = "Key System",
-                Content = "Incorrect key! Please try again.",
-                Duration = 3,
-                Sound = { SoundId = "rbxassetid://8486683243" }
             })
-        end
-    end
-})
 
--- Settings Section
+            -- Load and execute script
+            loadstring(game:HttpGet(scriptURL, true))()
+        end
+    })
+end
+
+-- Add Game Tabs for each game
+for gameName, scriptURL in pairs(GameScripts) do
+    createGameTab(gameName, scriptURL)
+end
+
+-- Settings Section for customization
 local InterfaceSection = Tabs.Settings:Section("Interface")
 
 -- Interface Theme Dropdown
@@ -156,13 +113,13 @@ InterfaceSection:Keybind("MenuKeybind", {
 })
 Library.MinimizeKeybind = Library.Options.MenuKeybind
 
--- Start on the Key System Tab
+-- Select the main tab by default
 Window:SelectTab(1)
 
 -- Notify the user that the script has loaded
 Library:Notify({
     Title = "BunnieHub",
-    Content = "The script has been loaded. Enter the key to proceed.",
+    Content = "The script has been loaded successfully.",
     Duration = 5,
     Sound = {
         SoundId = "rbxassetid://8486683243"
