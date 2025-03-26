@@ -3,13 +3,13 @@ local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOog
 
 -- Creating the window for the UI
 local Window = Library:Window{
-    Title = "BunnieHub",
+    Title = "BunnieHub KeySystem",
     SubTitle = "by Noxius Services",
     TabWidth = 160,
     Size = UDim2.fromOffset(830, 525),
     Resize = true,
     Acrylic = true,
-    Theme = "Rose",
+    Theme = "Amethyst",
     MinimizeKey = Enum.KeyCode.P
 }
 
