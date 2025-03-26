@@ -7,8 +7,8 @@ local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOog
 
 -- Create UI Window
 local Window = Library:Window{
-    Title = "Fluent {Library.Version}",
-    SubTitle = "by Actual Master Oogway",
+    Title = "BunnieHub KeySystem",
+    SubTitle = "by Noxius Services",
     TabWidth = 160,
     Size = UDim2.fromOffset(830, 525),
     Resize = true,
