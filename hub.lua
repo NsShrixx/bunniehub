@@ -1,153 +1,116 @@
--- Load the required libraries
+-- Load the Fluent library from the URL
+local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau", true))()
 
-local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/NsShrixx/bunniehub/refs/heads/main/sigmaboy.lua"))()
-
--- Create the main GUI
-local GUI = Mercury:Create{
-    Name = "Bunnie hub V1.2",
-    Size = UDim2.fromOffset(600, 400),
-    Theme = Mercury.Themes.Dark,
-    Link = "https://github.com/deeeity/mercury-lib"
+-- Creating the window for the UI
+local Window = Library:Window{
+    Title = `BunnieHub`,
+    SubTitle = "by Noxius Services",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(830, 525),
+    Resize = true,
+    Acrylic = true,
+    Theme = "Vynixu",
+    MinimizeKey = Enum.KeyCode.P
 }
 
--- Asset ID for all tabs' icons
-local commonIcon = "https://www.roblox.com/asset/?id=8569322835"  -- This is the common icon for all tabs
-
--- Create Tabs with the same icon
-local GamesTab = GUI:Tab{
-    Name = "Games",
-    Icon = commonIcon
+-- Creating the Tabs
+local Tabs = {
+    Main = Window:Tab{
+        Title = "Main",
+        Icon = "phosphor-users-bold"
+    },
+    Settings = Window:Tab{
+        Title = "Settings",
+        Icon = "settings"
+    }
 }
 
-local PlayerTab = GUI:Tab{
-    Name = "Player",
-    Icon = commonIcon
-}
+-- Function to create a Game Tab with a button that triggers a notification
+local function createGameTab(gameName)
+    local GameTab = Window:Tab{
+        Title = gameName,
+        Icon = "phosphor-gamepad-bold"
+    }
 
-local MiscTab = GUI:Tab{
-    Name = "Misc",
-    Icon = commonIcon
-}
-
--- Games Channels
-local PopularGames = GamesTab:Section{
-    Name = "Popular Games",
-    Side = "Left"
-}
-
-local Exploits = GamesTab:Section{
-    Name = "Game Exploits",
-    Side = "Right"
-}
-
--- Player Channels
-local Movement = PlayerTab:Section{
-    Name = "Movement",
-    Side = "Left"
-}
-
-local Modifiers = PlayerTab:Section{
-    Name = "Modifiers",
-    Side = "Right"
-}
-
--- Misc Channels
-local FunStuff = MiscTab:Section{
-    Name = "Fun Stuff",
-    Side = "Left"
-}
-
-local Utility = MiscTab:Section{
-    Name = "Utility",
-    Side = "Right"
-}
-
--- Games Buttons
-PopularGames:Button{
-    Name = "Teleport to Brookhaven",
-    Callback = function()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(100, 50, 200) -- Example
-    end
-}
-
-PopularGames:Button{
-    Name = "Teleport to Blox Fruits",
-    Callback = function()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(300, 50, 600) -- Example
-    end
-}
-
--- Player Movement Options
-Movement:Slider{
-    Name = "Walkspeed",
-    Min = 16,
-    Max = 200,
-    Default = 16,
-    Callback = function(value)
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
-    end
-}
-
-Movement:Slider{
-    Name = "Jump Power",
-    Min = 50,
-    Max = 500,
-    Default = 50,
-    Callback = function(value)
-        game.Players.LocalPlayer.Character.Humanoid.JumpPower = value
-    end
-}
-
-Modifiers:Toggle{
-    Name = "Infinite Jump",
-    StartingState = false,
-    Callback = function(state)
-        if state then
-            game:GetService("UserInputService").JumpRequest:Connect(function()
-                game.Players.LocalPlayer.Character.Humanoid:ChangeState("Jumping")
-            end)
+    -- Creating a Button inside the game tab that will trigger a notification
+    GameTab:Button({
+        Title = "Click Me",
+        Description = "Click this button to get a notification!",
+        Callback = function()
+            Library:Notify({
+                Title = "Button Clicked",
+                Content = "You clicked the 'Click Me' button for " .. gameName .. "!",
+                Duration = 4,  -- Duration of the notification in seconds
+                Sound = {
+                    SoundId = "rbxassetid://8486683243"  -- A sound to play when the notification appears
+                }
+            })
         end
-    end
-}
+    })
+end
 
--- Miscellaneous Features
-FunStuff:Button{
-    Name = "Spam Chat Message",
-    Callback = function()
-        while true do
-            wait(1)
-            game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("Hello World!", "All")
+-- Adding game tabs for each game
+createGameTab("Break in 2")
+createGameTab("Fisch")
+createGameTab("Dead Rails")
+createGameTab("Bee Swarm")
+createGameTab("Arsenal")
+
+-- Settings Section for customization
+local InterfaceSection = Tabs.Settings:Section("Interface")
+
+-- Interface Theme Dropdown
+InterfaceSection:Dropdown("InterfaceTheme", {
+    Title = "Theme",
+    Description = "Changes the interface theme.",
+    Values = Library.Themes,
+    Default = Library.Theme,
+    Callback = function(Value)
+        Library:SetTheme(Value)
+    end
+})
+
+-- Acrylic Toggle
+if Library.UseAcrylic then
+    InterfaceSection:Toggle("AcrylicToggle", {
+        Title = "Acrylic",
+        Description = "The blurred background requires graphic quality 8+",
+        Default = Library.Acrylic,
+        Callback = function(Value)
+            Library:ToggleAcrylic(Value)
         end
+    })
+end
+
+-- Transparency Toggle
+InterfaceSection:Toggle("TransparentToggle", {
+    Title = "Transparency",
+    Description = "Makes the interface transparent.",
+    Default = Library.Transparency,
+    Callback = function(Value)
+        Library:ToggleTransparency(Value)
     end
-}
+})
 
--- Utility Functions
-Utility:Button{
-    Name = "Server Hop",
-    Callback = function()
-        local HttpService = game:GetService("HttpService")
-        local TPS = game:GetService("TeleportService")
-        local Servers = HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Desc&limit=100"))
-
-        for _, v in pairs(Servers.data) do
-            if v.playing < v.maxPlayers then
-                TPS:TeleportToPlaceInstance(game.PlaceId, v.id, game.Players.LocalPlayer)
-                break
-            end
-        end
+-- Keybind for Minimize
+InterfaceSection:Keybind("MenuKeybind", {
+    Title = "Minimize Bind", 
+    Default = Library.MinimizeKey or Enum.KeyCode.RightShift,
+    ChangedCallback = function(Value)
+        Library.MinimizeKey = Value
     end
-}
+})
+Library.MinimizeKeybind = Library.Options.MenuKeybind
 
-Utility:Button{
-    Name = "Rejoin Server",
-    Callback = function()
-        game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
-    end
-}
+-- Select the main tab by default
+Window:SelectTab(1)
 
--- Notification Example
-GUI:Notification{
-    Title = "Welcome to Bunnie Hub!",
-    Text = "Enjoy your Time (We have ur passwords)!",
-    Duration = 7
-}
+-- Notify the user that the script has loaded
+Library:Notify({
+    Title = "Fluent",
+    Content = "The script has been loaded.",
+    Duration = 8,
+    Sound = {
+        SoundId = "rbxassetid://8486683243"  -- Sound played when the script loads
+    }
+})
